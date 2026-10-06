@@ -1,0 +1,10 @@
+com\example\hostelmanagement\HostelManagementApplication.class
+com\example\hostelmanagement\repository\StudentRepository.class
+com\example\hostelmanagement\controller\AuthController.class
+com\example\hostelmanagement\model\Student.class
+com\example\hostelmanagement\dto\RegisterRequest.class
+com\example\hostelmanagement\controller\DashboardController.class
+com\example\hostelmanagement\service\StudentService.class
+com\example\hostelmanagement\exception\StudentAlreadyExistsException.class
+com\example\hostelmanagement\dto\LoginRequest.class
+com\example\hostelmanagement\exception\GlobalExceptionHandler.class

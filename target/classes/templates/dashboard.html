@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resident Dashboard - Hostel Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <a th:href="@{/dashboard}" class="brand">
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/>
+                </svg>
+            </div>
+            <span>HostelHub</span>
+        </a>
+        <nav class="nav-links">
+            <span style="font-size: 0.9rem; color: var(--gray-600); font-weight: 500;">
+                Welcome, <strong th:text="${student.name}">Alex</strong>
+            </span>
+            <a th:href="@{/logout}" class="btn btn-danger" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Logout</span>
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container-wide">
+            
+            <div class="dashboard-grid">
+                <!-- Left Sidebar / Profile Card -->
+                <div class="profile-card">
+                    <div class="profile-avatar">
+                        <span th:text="${#strings.substring(student.name, 0, 1)}">A</span>
+                    </div>
+                    <h2 class="profile-name" th:text="${student.name}">Alex Rivera</h2>
+                    <span class="badge-tag" th:text="${student.departmentName}">Computer Science</span>
+
+                    <div style="margin-top: 1rem; border-top: 1px solid var(--gray-200); padding-top: 1.25rem; text-align: left;">
+                        <div style="font-size: 0.8rem; color: var(--gray-500); font-weight: 600; text-transform: uppercase;">Hostel Status</div>
+                        <div style="color: var(--success); font-weight: 700; display: flex; align-items: center; gap: 0.4rem; margin-top: 0.25rem;">
+                            <span style="width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: inline-block;"></span>
+                            Active Resident
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 1rem; text-align: left;">
+                        <div style="font-size: 0.8rem; color: var(--gray-500); font-weight: 600; text-transform: uppercase;">Registered On</div>
+                        <div style="color: var(--gray-700); font-weight: 500; font-size: 0.9rem; margin-top: 0.25rem;" th:text="${student.formattedCreatedAt}">
+                            05-10-2026
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <a th:href="@{/logout}" class="btn btn-outline btn-block" style="font-size: 0.88rem;">
+                            Sign Out
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right / Resident Details Card -->
+                <div class="details-card">
+                    <div class="details-header">
+                        <h2>Resident Profile & Allocation Details</h2>
+                        <span class="badge-tag" style="margin-bottom: 0;">Verified Record</span>
+                    </div>
+
+                    <div class="info-grid">
+                        <!-- Account Number -->
+                        <div class="info-item">
+                            <div class="info-label">Hostel Account Number</div>
+                            <div class="info-value mono" th:text="${student.accountNumber}">HOSTEL000001</div>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div class="info-item">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value" th:text="${student.name}">Alex Rivera</div>
+                        </div>
+
+                        <!-- Date of Birth -->
+                        <div class="info-item">
+                            <div class="info-label">Date of Birth (DD-MM-YYYY)</div>
+                            <div class="info-value" th:text="${student.formattedDob}">15-08-2003</div>
+                        </div>
+
+                        <!-- Department -->
+                        <div class="info-item">
+                            <div class="info-label">Department / Branch</div>
+                            <div class="info-value" th:text="${student.departmentName}">Computer Science & Engineering</div>
+                        </div>
+
+                        <!-- Home Address -->
+                        <div class="info-item full-width">
+                            <div class="info-label">Permanent Home Address</div>
+                            <div class="info-value" style="font-weight: 500; line-height: 1.5;" th:text="${student.homeAddress}">
+                                124 Campus Avenue, Block B, City Center, 560001
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Modules Section Placeholder -->
+                    <div style="margin-top: 2rem; padding: 1.25rem; background: var(--gray-50); border: 1px dashed var(--gray-300); border-radius: var(--radius-sm);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--primary); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.35rem;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            Hostel Management Services
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--gray-600); margin: 0;">
+                            Room allocation, mess billing, gate-pass requests, and complaint ticketing modules are being integrated for the upcoming semester.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        Hostel Management System &copy; 2026 &bull; College Student Living Portal
+    </footer>
+
+    <script th:src="@{/js/script.js}"></script>
+</body>
+</html>

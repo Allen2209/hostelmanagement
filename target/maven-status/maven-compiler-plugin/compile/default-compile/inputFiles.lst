@@ -1,0 +1,10 @@
+C:\Users\AMAR\projects\hack1\hostel-management\src\main\java\com\example\hostelmanagement\controller\AuthController.java
+C:\Users\AMAR\projects\hack1\hostel-management\src\main\java\com\example\hostelmanagement\controller\DashboardController.java
+C:\Users\AMAR\projects\hack1\hostel-management\src\main\java\com\example\hostelmanagement\dto\LoginRequest.java
+C:\Users\AMAR\projects\hack1\hostel-management\src\main\java\com\example\hostelmanagement\dto\RegisterRequest.java
+C:\Users\AMAR\projects\hack1\hostel-management\src\main\java\com\example\hostelmanagement\exception\GlobalExceptionHandler.java
+C:\Users\AMAR\projects\hack1\hostel-management\src\main\java\com\example\hostelmanagement\exception\StudentAlreadyExistsException.java
+C:\Users\AMAR\projects\hack1\hostel-management\src\main\java\com\example\hostelmanagement\HostelManagementApplication.java
+C:\Users\AMAR\projects\hack1\hostel-management\src\main\java\com\example\hostelmanagement\model\Student.java
+C:\Users\AMAR\projects\hack1\hostel-management\src\main\java\com\example\hostelmanagement\repository\StudentRepository.java
+C:\Users\AMAR\projects\hack1\hostel-management\src\main\java\com\example\hostelmanagement\service\StudentService.java
