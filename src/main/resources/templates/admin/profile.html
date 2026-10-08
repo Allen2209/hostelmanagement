@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Admin profile')}"></head>
+<body class="portal-body">
+<div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: adminSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Administrator profile', 'ADMINISTRATION')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">ACCOUNT SETTINGS</div><h1>Administrator profile</h1><p>Administrator account settings and contact details.</p></div></div>
+            <section class="portal-card">
+                <div class="profile-summary"><div class="profile-large-avatar" th:text="${#strings.substring(adminName, 0, 1)}">A</div><div><h2 th:text="${adminName}">admin</h2><p>Hostel administrator</p></div></div>
+                <div class="info-grid"><div class="info-item"><div class="info-label">Username</div><div class="info-value" th:text="${adminName}">admin</div></div><div class="info-item"><div class="info-label">Role</div><div class="info-value">ADMIN</div></div></div>
+                <div class="notice-card" style="margin-top:1rem"><span>i</span><div><strong>Keep demo credentials private</strong>Change the development password before using this application outside a local demo.</div></div>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Dashboard')}"></head>
+<body class="portal-body">
+<div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: studentSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Dashboard', 'STUDENT PORTAL')}"></header>
+        <div class="portal-content">
+            <section class="welcome-panel student-welcome">
+                <div class="welcome-copy">
+                    <span class="eyebrow">YOUR CAMPUS, YOUR HOME</span>
+                    <h1>Welcome home, <span th:text="${student.name}">Student</span></h1>
+                    <p>Your hostel life, all in one place. Find your room, keep up with updates, and get help whenever you need it.</p>
+                    <a th:href="@{/student/rooms}" class="hero-action">Explore available rooms <span aria-hidden="true">→</span></a>
+                </div>
+                <div class="welcome-account">
+                    <span>Hostel account</span>
+                    <strong th:text="${student.accountNumber}">HOSTEL000001</strong>
+                </div>
+                <svg class="welcome-art" viewBox="0 0 220 180" fill="none" aria-hidden="true">
+                    <path d="M22 149h176M45 149V76l49-31v104M94 149V60l50-29v118M144 149V83l34-20v86" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M58 91h13m-13 19h13m37-39h13m-13 20h13m-13 20h13m37-7h11m-11 20h11" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+                    <circle cx="181" cy="31" r="13" fill="currentColor" opacity=".65"/>
+                </svg>
+            </section>
+
+            <section class="metric-grid" aria-label="Hostel overview">
+                <article class="metric-card">
+                    <span class="metric-icon">⌂</span>
+                    <div><span>My room</span><strong th:text="${student.room != null ? student.room.roomNumber : 'Not assigned'}">Not assigned</strong></div>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-icon green">▦</span>
+                    <div><span>Mess preference</span><strong th:text="${messPreference != null ? messPreference.foodPreference : 'Not set'}">Not set</strong></div>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-icon amber">◇</span>
+                    <div><span>Open complaints</span><strong th:text="${pendingComplaints}">0</strong></div>
+                </article>
+                <article class="metric-card">
+                    <span class="metric-icon violet">◷</span>
+                    <div><span>Room request</span><strong th:text="${latestRoomRequest != null ? latestRoomRequest.status : 'None'}">None</strong></div>
+                </article>
+            </section>
+
+            <section class="content-grid">
+                <article class="portal-card">
+                    <div class="portal-card-heading">
+                        <div><h2>Quick access</h2><p>Explore your hostel services</p></div>
+                    </div>
+                    <div class="quick-links">
+                        <a th:href="@{/student/rooms}" class="quick-link"><span class="quick-icon">▦</span><span class="quick-link-copy"><strong>Find a room</strong><small>Explore available spaces</small></span><span class="quick-arrow" aria-hidden="true">→</span></a>
+                        <a th:href="@{/student/room}" class="quick-link"><span class="quick-icon green">⌂</span><span class="quick-link-copy"><strong>My room</strong><small>View your allocation</small></span><span class="quick-arrow" aria-hidden="true">→</span></a>
+                        <a th:href="@{/student/requests}" class="quick-link"><span class="quick-icon violet">◷</span><span class="quick-link-copy"><strong>Room requests</strong><small>Follow your application</small></span><span class="quick-arrow" aria-hidden="true">→</span></a>
+                        <a th:href="@{/student/complaints}" class="quick-link"><span class="quick-icon amber">◇</span><span class="quick-link-copy"><strong>Get support</strong><small>Submit or track a concern</small></span><span class="quick-arrow" aria-hidden="true">→</span></a>
+                        <a th:href="@{/student/mess}" class="quick-link"><span class="quick-icon green">✦</span><span class="quick-link-copy"><strong>Mess & meals</strong><small>Set your meal preference</small></span><span class="quick-arrow" aria-hidden="true">→</span></a>
+                        <a th:href="@{/student/leave}" class="quick-link"><span class="quick-icon violet">↗</span><span class="quick-link-copy"><strong>Request leave</strong><small>Plan time away</small></span><span class="quick-arrow" aria-hidden="true">→</span></a>
+                    </div>
+                </article>
+                <article class="portal-card">
+                    <div class="portal-card-heading">
+                        <div><h2>Your profile</h2><p>Registered student details</p></div>
+                        <a th:href="@{/student/profile}" class="text-link">View profile</a>
+                    </div>
+                    <div class="profile-summary">
+                        <div class="profile-large-avatar" th:text="${#strings.substring(student.name, 0, 1)}">S</div>
+                        <div><h2 th:text="${student.name}">Student Name</h2><p th:text="${student.departmentName}">Department</p></div>
+                    </div>
+                    <div class="notice-card">
+                        <span>i</span>
+                        <div><strong>Hostel services</strong>Room requests and support services will be shown here once enabled by your hostel.</div>
+                    </div>
+                </article>
+            </section>
+            <section class="portal-card dashboard-notifications">
+                <div class="portal-card-heading"><div><h2>Recent notifications</h2><p>Updates from the hostel administration</p></div><a th:href="@{/student/notifications}" class="text-link">View all</a></div>
+                <div th:if="${#lists.isEmpty(notifications)}" class="notice-card"><span>i</span><div><strong>You're all caught up</strong>New room, complaint, leave, or fee updates will show here.</div></div>
+                <div class="notification-list" th:unless="${#lists.isEmpty(notifications)}">
+                    <div class="notification-row" th:each="notice : ${notifications}">
+                        <span class="notification-mark">♢</span><div><strong th:text="${notice.title}">Update</strong><p th:text="${notice.message}">Message</p></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Leave requests')}"></head>
+<body class="portal-body"><div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: adminSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Leave requests', 'ADMINISTRATION')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">STUDENT APPLICATIONS</div><h1>Leave requests</h1><p>Review student leave applications and update decisions.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div><div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="portal-card"><div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Student</th><th>Dates</th><th>Reason</th><th>Parent contact</th><th>Status / review</th></tr></thead><tbody>
+                <tr th:each="leave : ${leaves}">
+                    <td th:text="|${leave.student.name} (${leave.student.studentId})|">Student</td><td th:text="|${leave.fromDate} – ${leave.toDate}|">Dates</td><td class="wrap-cell" th:text="${leave.reason}">Reason</td><td th:text="|${leave.parentName} · ${leave.parentPhone}|">Parent</td>
+                    <td><span class="status-badge" th:text="${leave.status}">PENDING</span>
+                        <form th:if="${leave.status == 'PENDING'}" th:action="@{/admin/leave/{id}/review(id=${leave.id})}" method="post" class="review-form">
+                            <input name="remarks" class="form-control no-icon compact-input" placeholder="Admin remarks">
+                            <button name="status" value="APPROVED" class="btn btn-primary btn-small" type="submit">Approve</button>
+                            <button name="status" value="REJECTED" class="btn btn-outline btn-small" type="submit">Reject</button>
+                        </form>
+                        <small class="remarks-text" th:if="${leave.adminRemarks}" th:text="${leave.adminRemarks}"></small>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(leaves)}"><td colspan="5" class="table-empty">No leave applications.</td></tr>
+            </tbody></table></div></section>
+        </div>
+    </main>
+</div></body></html>

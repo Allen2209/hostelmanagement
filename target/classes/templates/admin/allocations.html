@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Allocations')}"></head>
+<body class="portal-body"><div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: adminSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Allocations', 'ADMINISTRATION')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">ROOM ASSIGNMENTS</div><h1>Allocations</h1><p>Students with an approved and active room assignment.</p></div></div>
+            <section class="portal-card"><div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Student</th><th>Student ID</th><th>Room</th><th>Hostel</th><th>Room type</th></tr></thead><tbody>
+                <tr th:each="student : ${allocatedStudents}"><td th:text="${student.name}">Student</td><td th:text="${student.studentId}">STU001</td><td th:text="${student.room.roomNumber}">101</td><td th:text="${student.room.hostel.name}">A Block</td><td th:text="${student.room.roomType}">4 Sharing</td></tr>
+                <tr th:if="${#lists.isEmpty(allocatedStudents)}"><td colspan="5" class="table-empty">No active room allocations.</td></tr>
+            </tbody></table></div></section>
+        </div>
+    </main>
+</div></body></html>

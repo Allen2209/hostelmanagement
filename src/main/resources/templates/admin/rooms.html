@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Rooms')}"></head>
+<body class="portal-body">
+<div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: adminSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Rooms', 'ADMINISTRATION')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">ACCOMMODATION INVENTORY</div><h1>Rooms</h1><p>Review room capacity, occupancy, and availability.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div><div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="portal-card" style="margin-bottom:1rem">
+                <div class="portal-card-heading"><div><h2>Add room</h2><p>Assign a room to a hostel.</p></div></div>
+                <form th:action="@{/admin/rooms/save}" th:object="${roomForm}" method="post" class="inline-form">
+                    <select th:field="*{hostelId}" class="form-control no-icon" required><option value="">Select hostel</option><option th:each="hostel : ${hostels}" th:value="${hostel.id}" th:text="${hostel.name}">Hostel</option></select>
+                    <input th:field="*{roomNumber}" class="form-control no-icon" placeholder="Room number" required>
+                    <input th:field="*{roomType}" class="form-control no-icon" placeholder="Room type" required>
+                    <input th:field="*{capacity}" type="number" min="1" class="form-control no-icon" placeholder="Capacity" required>
+                    <button class="btn btn-primary" type="submit">Add room</button>
+                </form>
+            </section>
+            <section class="portal-card">
+                <div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Room</th><th>Hostel</th><th>Type</th><th>Capacity</th><th>Occupied</th><th>Available</th><th>Status / actions</th></tr></thead><tbody>
+                    <tr th:each="room : ${rooms}">
+                        <td colspan="6">
+                            <form th:action="@{/admin/rooms/save(id=${room.id})}" method="post" class="inline-form">
+                                <select name="hostelId" class="form-control no-icon" required><option th:each="hostel : ${hostels}" th:value="${hostel.id}" th:text="${hostel.name}" th:selected="${hostel.id == room.hostel.id}">Hostel</option></select>
+                                <input name="roomNumber" class="form-control no-icon" th:value="${room.roomNumber}" required>
+                                <input name="roomType" class="form-control no-icon" th:value="${room.roomType}" required>
+                                <input name="capacity" type="number" min="1" class="form-control no-icon" th:value="${room.capacity}" required>
+                                <span th:text="|${room.occupied} occupied · ${room.availableBeds} free|">2 occupied</span>
+                                <input name="status" class="form-control no-icon" th:value="${room.status}" required>
+                                <button class="btn btn-outline btn-small" type="submit">Save</button>
+                            </form>
+                        </td>
+                        <td><form th:action="@{/admin/rooms/{id}/deactivate(id=${room.id})}" method="post"><button class="btn btn-outline btn-small" type="submit" th:disabled="${room.status == 'MAINTENANCE'}">Maintenance</button></form></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(rooms)}"><td colspan="7" class="table-empty">No rooms added yet.</td></tr>
+                </tbody></table></div>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>

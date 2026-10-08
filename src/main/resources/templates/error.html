@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Hostel Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <a th:href="@{/login}" class="brand">
+            <div class="brand-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/>
+                </svg>
+            </div>
+            <span>HostelHub</span>
+        </a>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container-center">
+            <div class="card" style="text-align: center;">
+                <div style="width: 64px; height: 64px; background: #fef2f2; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; color: #ef4444;">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                </div>
+                <h2>Oops! Something went wrong</h2>
+                <p style="color: var(--gray-600); margin: 1rem 0;" th:text="${errorMessage}">
+                    An unexpected error occurred while processing your request.
+                </p>
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; justify-content: center;">
+                    <a th:href="@{/login}" class="btn btn-primary">Return to Login</a>
+                    <a th:href="@{/register}" class="btn btn-outline">Go to Register</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        Hostel Management System &copy; 2026 &bull; College Student Living Portal
+    </footer>
+
+</body>
+</html>

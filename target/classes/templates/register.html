@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student registration · HostelHub</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="navbar">
+    <a th:href="@{/login}" class="brand"><span class="portal-brand-mark">H</span><span>HostelHub</span></a>
+    <nav class="nav-links"><a th:href="@{/login}" class="nav-link">Sign in</a><a th:href="@{/register}" class="nav-link active">Register</a></nav>
+</header>
+<main class="main-content">
+    <div class="container-center" style="max-width:680px">
+        <section class="card">
+            <div th:if="${registrationSuccess}">
+                <div class="card-header"><h1>Registration complete</h1><p>Welcome to HostelHub, <strong th:text="${registeredName}">Student</strong>.</p></div>
+                <div class="success-banner">
+                    <div class="account-label">Your hostel account ID</div>
+                    <div class="account-badge-box"><span class="account-number" th:text="${accountNumber}">HOSTEL000001</span></div>
+                    <p style="margin-top:0.75rem;color:#065f46">Use your Student ID and the password you chose to sign in.</p>
+                </div>
+                <a th:href="@{/login}" class="btn btn-primary btn-block">Continue to sign in</a>
+            </div>
+            <div th:unless="${registrationSuccess}">
+                <div class="card-header"><h1>Student registration</h1><p>Create an account to access hostel services.</p></div>
+                <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+                <form th:action="@{/register}" th:object="${registerRequest}" method="post" class="needs-validation" novalidate>
+                    <div class="info-grid">
+                        <div class="form-group">
+                            <label for="studentId" class="form-label">Student ID <span class="req">*</span></label>
+                            <input id="studentId" th:field="*{studentId}" class="form-control no-icon" required>
+                            <div th:if="${#fields.hasErrors('studentId')}" class="error-text" th:errors="*{studentId}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="form-label">Full name <span class="req">*</span></label>
+                            <input id="name" th:field="*{name}" class="form-control no-icon" required>
+                            <div th:if="${#fields.hasErrors('name')}" class="error-text" th:errors="*{name}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateOfBirth" class="form-label">Date of birth <span class="req">*</span></label>
+                            <input id="dateOfBirth" type="date" th:field="*{dateOfBirth}" class="form-control no-icon" required>
+                            <div th:if="${#fields.hasErrors('dateOfBirth')}" class="error-text" th:errors="*{dateOfBirth}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email <span class="req">*</span></label>
+                            <input id="email" type="email" th:field="*{email}" class="form-control no-icon" required>
+                            <div th:if="${#fields.hasErrors('email')}" class="error-text" th:errors="*{email}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone <span class="req">*</span></label>
+                            <input id="phone" th:field="*{phone}" class="form-control no-icon" required>
+                            <div th:if="${#fields.hasErrors('phone')}" class="error-text" th:errors="*{phone}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password <span class="req">*</span></label>
+                            <input id="password" type="password" th:field="*{password}" class="form-control no-icon" minlength="8" required>
+                            <div th:if="${#fields.hasErrors('password')}" class="error-text" th:errors="*{password}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="departmentName" class="form-label">Department <span class="req">*</span></label>
+                            <input id="departmentName" th:field="*{departmentName}" class="form-control no-icon" required>
+                            <div th:if="${#fields.hasErrors('departmentName')}" class="error-text" th:errors="*{departmentName}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="academicYear" class="form-label">Year of study <span class="req">*</span></label>
+                            <select id="academicYear" th:field="*{academicYear}" class="form-control no-icon" required>
+                                <option value="">Select year</option><option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4">Year 4</option><option value="5">Year 5</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender" class="form-label">Gender <span class="req">*</span></label>
+                            <select id="gender" th:field="*{gender}" class="form-control no-icon" required>
+                                <option value="">Select</option><option value="FEMALE">FEMALE</option><option value="MALE">MALE</option><option value="OTHER">OTHER</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="parentName" class="form-label">Parent / guardian <span class="req">*</span></label>
+                            <input id="parentName" th:field="*{parentName}" class="form-control no-icon" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="parentPhone" class="form-label">Parent phone <span class="req">*</span></label>
+                            <input id="parentPhone" th:field="*{parentPhone}" class="form-control no-icon" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="homeAddress" class="form-label">Address <span class="req">*</span></label>
+                            <textarea id="homeAddress" th:field="*{homeAddress}" class="form-control no-icon" rows="2" required></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Create student account</button>
+                </form>
+                <div class="form-footer">Already registered? <a th:href="@{/login}">Sign in</a></div>
+            </div>
+        </section>
+    </div>
+</main>
+<footer class="app-footer">HostelHub · College Hostel Management</footer>
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Fees')}"></head>
+<body class="portal-body"><div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: studentSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Fees', 'STUDENT PORTAL')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">FEE STATEMENTS</div><h1>Hostel fees</h1><p>Review hostel charges and payment balances.</p></div></div>
+            <section class="portal-card"><div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Fee ID</th><th>Total fee</th><th>Paid</th><th>Pending</th><th>Due date</th><th>Status</th></tr></thead><tbody>
+                <tr th:each="fee : ${fees}"><td th:text="${fee.id}">1</td><td th:text="${fee.amount}">0.00</td><td th:text="${fee.paidAmount}">0.00</td><td th:text="${fee.pendingAmount}">0.00</td><td th:text="${fee.dueDate}">Date</td><td><span class="status-badge" th:text="${fee.status}">PENDING</span></td></tr>
+                <tr th:if="${#lists.isEmpty(fees)}"><td colspan="6" class="table-empty">No fees have been posted to your account.</td></tr>
+            </tbody></table></div></section>
+            <div class="notice-card" style="margin-top:1rem"><span>i</span><div><strong>Payments are recorded by the hostel office</strong>This portal displays payment balances but does not process online payments.</div></div>
+        </div>
+    </main>
+</div></body></html>

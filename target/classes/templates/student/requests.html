@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Room requests')}"></head>
+<body class="portal-body">
+<div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: studentSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Room requests', 'STUDENT PORTAL')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">APPLICATION HISTORY</div><h1>Room requests</h1><p>Follow the status of your room applications.</p></div></div>
+            <section class="portal-card">
+                <div class="data-table-wrap">
+                    <table class="portal-table">
+                        <thead><tr><th>Request</th><th>Room</th><th>Submitted</th><th>Status</th><th>Reason / remarks</th></tr></thead>
+                        <tbody><tr th:each="request : ${requests}">
+                            <td th:text="${'#' + request.id}">#1</td><td th:text="|${request.room.hostel.name} · ${request.room.roomNumber}|">A Block · 101</td>
+                            <td th:text="${#temporals.format(request.requestDate, 'dd MMM yyyy')}">Date</td><td><span class="status-badge" th:text="${request.status}">PENDING</span></td>
+                            <td th:text="${request.adminRemarks != null ? request.adminRemarks : request.reason}">Remarks</td>
+                        </tr><tr th:if="${#lists.isEmpty(requests)}"><td colspan="5" class="table-empty">No room requests submitted.</td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Fee management')}"></head>
+<body class="portal-body"><div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: adminSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Fee management', 'ADMINISTRATION')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">FEE ADMINISTRATION</div><h1>Hostel fees</h1><p>Add fee records and update payments received by the office.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div><div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="portal-card" style="margin-bottom:1rem">
+                <div class="portal-card-heading"><div><h2>Add student fee</h2><p>The student receives an in-app notification.</p></div></div>
+                <form th:action="@{/admin/fees/save}" th:object="${feeForm}" method="post" class="inline-form">
+                    <select th:field="*{studentId}" class="form-control no-icon" required><option value="">Select student</option><option th:each="student : ${students}" th:value="${student.id}" th:text="|${student.studentId} · ${student.name}|">Student</option></select>
+                    <input type="number" step="0.01" min="0.01" th:field="*{amount}" class="form-control no-icon" placeholder="Total amount" required>
+                    <input type="number" step="0.01" min="0" th:field="*{paidAmount}" class="form-control no-icon" placeholder="Paid amount" required>
+                    <input type="date" th:field="*{dueDate}" class="form-control no-icon" required>
+                    <button class="btn btn-primary" type="submit">Add fee</button>
+                </form>
+            </section>
+            <section class="portal-card"><div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Student</th><th>Amount</th><th>Paid</th><th>Pending</th><th>Due date</th><th>Status</th><th>Record payment</th></tr></thead><tbody>
+                <tr th:each="fee : ${fees}"><td th:text="|${fee.student.name} (${fee.student.studentId})|">Student</td><td th:text="${fee.amount}">0</td><td th:text="${fee.paidAmount}">0</td><td th:text="${fee.pendingAmount}">0</td><td th:text="${fee.dueDate}">Date</td><td><span class="status-badge" th:text="${fee.status}">PENDING</span></td>
+                    <td><form th:action="@{/admin/fees/{id}/payment(id=${fee.id})}" method="post" class="compact-action"><input name="paidAmount" type="number" min="0" step="0.01" class="form-control no-icon compact-input" th:value="${fee.paidAmount}" required><button class="btn btn-outline btn-small" type="submit">Update</button></form></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(fees)}"><td colspan="7" class="table-empty">No fee records.</td></tr>
+            </tbody></table></div></section>
+        </div>
+    </main>
+</div></body></html>

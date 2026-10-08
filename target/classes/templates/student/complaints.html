@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Complaints')}"></head>
+<body class="portal-body">
+<div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: studentSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Complaints', 'STUDENT PORTAL')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">STUDENT SUPPORT</div><h1>Complaints</h1><p>View support tickets and their latest resolution updates.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="content-grid">
+                <article class="portal-card">
+                    <div class="portal-card-heading"><div><h2>Submit a complaint</h2><p>Tell the hostel team what needs attention.</p></div></div>
+                    <form th:action="@{/student/complaints}" th:object="${complaintForm}" method="post">
+                        <div class="form-group"><label class="form-label" for="category">Category</label><select id="category" th:field="*{category}" class="form-control no-icon" required><option value="">Choose category</option><option value="Maintenance">Maintenance</option><option value="Electricity">Electricity</option><option value="Water">Water</option><option value="Cleaning">Cleaning</option><option value="Food">Food</option><option value="Room">Room</option><option value="Other">Other</option></select></div>
+                        <div class="form-group"><label class="form-label" for="subject">Subject</label><input id="subject" th:field="*{subject}" class="form-control no-icon" maxlength="150" required></div>
+                        <div class="form-group"><label class="form-label" for="description">Description</label><textarea id="description" th:field="*{description}" class="form-control no-icon" rows="4" maxlength="2000" required></textarea></div>
+                        <button class="btn btn-primary" type="submit">Submit complaint</button>
+                    </form>
+                </article>
+                <article class="portal-card">
+                <div class="portal-card-heading"><div><h2>Your complaints</h2><p>Status updates from the hostel team.</p></div></div>
+                <div class="data-table-wrap">
+                    <table class="portal-table">
+                        <thead><tr><th>Subject</th><th>Category</th><th>Date</th><th>Status</th><th>Remarks</th></tr></thead>
+                        <tbody><tr th:each="complaint : ${complaints}">
+                            <td th:text="${complaint.subject}">Subject</td><td th:text="${complaint.category}">Category</td>
+                            <td th:text="${#temporals.format(complaint.createdAt, 'dd MMM yyyy')}">Date</td>
+                            <td><span class="status-badge" th:text="${complaint.status}">PENDING</span></td>
+                            <td th:text="${complaint.adminRemarks != null ? complaint.adminRemarks : '—'}">Remarks</td>
+                        </tr><tr th:if="${#lists.isEmpty(complaints)}"><td colspan="5" class="table-empty">No complaints submitted.</td></tr></tbody>
+                    </table>
+                </div>
+                </article>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>

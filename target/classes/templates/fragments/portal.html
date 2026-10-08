@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' · HostelHub'">HostelHub</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script defer th:src="@{/js/script.js}"></script>
+</head>
+<body>
+<aside th:fragment="studentSidebar(activePage)" class="portal-sidebar" id="portalSidebar">
+    <a th:href="@{/dashboard}" class="portal-brand">
+        <span class="portal-brand-mark">H</span>
+        <span>Hostel<span class="brand-light">Hub</span></span>
+    </a>
+    <div class="sidebar-caption">STUDENT PORTAL</div>
+    <nav class="sidebar-nav" aria-label="Student navigation">
+        <a th:href="@{/dashboard}" th:classappend="${activePage == 'dashboard'} ? ' is-active' : ''"><span class="nav-symbol">⌂</span>Dashboard</a>
+        <a th:href="@{/student/rooms}" th:classappend="${activePage == 'rooms'} ? ' is-active' : ''"><span class="nav-symbol">▦</span>Available rooms</a>
+        <a th:href="@{/student/room}" th:classappend="${activePage == 'room'} ? ' is-active' : ''"><span class="nav-symbol">⌂</span>My room</a>
+        <a th:href="@{/student/requests}" th:classappend="${activePage == 'requests'} ? ' is-active' : ''"><span class="nav-symbol">◷</span>Room requests</a>
+        <a th:href="@{/student/mess}" th:classappend="${activePage == 'mess'} ? ' is-active' : ''"><span class="nav-symbol">✦</span>Mess</a>
+        <a th:href="@{/student/complaints}" th:classappend="${activePage == 'complaints'} ? ' is-active' : ''"><span class="nav-symbol">◇</span>Complaints</a>
+        <a th:href="@{/student/leave}" th:classappend="${activePage == 'leave'} ? ' is-active' : ''"><span class="nav-symbol">↗</span>Leave requests</a>
+        <a th:href="@{/student/fees}" th:classappend="${activePage == 'fees'} ? ' is-active' : ''"><span class="nav-symbol">₹</span>Fees</a>
+        <a th:href="@{/student/notifications}" th:classappend="${activePage == 'notifications'} ? ' is-active' : ''"><span class="nav-symbol">♢</span>Notifications</a>
+        <a th:href="@{/student/profile}" th:classappend="${activePage == 'profile'} ? ' is-active' : ''"><span class="nav-symbol">◉</span>My profile</a>
+        <a th:href="@{/student/change-password}" th:classappend="${activePage == 'password'} ? ' is-active' : ''"><span class="nav-symbol">⌑</span>Change password</a>
+    </nav>
+    <div class="sidebar-bottom">
+        <div class="sidebar-help">
+            <span class="help-icon">?</span>
+            <div><strong>Need a hand?</strong><small>Contact your hostel office</small></div>
+        </div>
+        <form th:action="@{/logout}" method="post" class="logout-form"><button type="submit" class="sidebar-logout"><span class="nav-symbol">↪</span>Sign out</button></form>
+        <div class="sidebar-footnote">HOSTEL MANAGEMENT · 2026</div>
+    </div>
+</aside>
+
+<aside th:fragment="adminSidebar(activePage)" class="portal-sidebar admin-sidebar" id="portalSidebar">
+    <a th:href="@{/admin/dashboard}" class="portal-brand">
+        <span class="portal-brand-mark">H</span>
+        <span>Hostel<span class="brand-light">Hub</span></span>
+    </a>
+    <div class="sidebar-caption">ADMINISTRATION</div>
+    <nav class="sidebar-nav" aria-label="Administrator navigation">
+        <a th:href="@{/admin/dashboard}" th:classappend="${activePage == 'dashboard'} ? ' is-active' : ''"><span class="nav-symbol">⌂</span>Dashboard</a>
+        <a th:href="@{/admin/hostels}" th:classappend="${activePage == 'hostels'} ? ' is-active' : ''"><span class="nav-symbol">▤</span>Hostels</a>
+        <a th:href="@{/admin/rooms}" th:classappend="${activePage == 'rooms'} ? ' is-active' : ''"><span class="nav-symbol">▦</span>Rooms</a>
+        <a th:href="@{/admin/students}" th:classappend="${activePage == 'students'} ? ' is-active' : ''"><span class="nav-symbol">♧</span>Students</a>
+        <a th:href="@{/admin/room-requests}" th:classappend="${activePage == 'requests'} ? ' is-active' : ''"><span class="nav-symbol">◷</span>Room requests</a>
+        <a th:href="@{/admin/allocations}" th:classappend="${activePage == 'allocations'} ? ' is-active' : ''"><span class="nav-symbol">▣</span>Allocations</a>
+        <a th:href="@{/admin/complaints}" th:classappend="${activePage == 'complaints'} ? ' is-active' : ''"><span class="nav-symbol">◇</span>Complaints</a>
+        <a th:href="@{/admin/leave}" th:classappend="${activePage == 'leave'} ? ' is-active' : ''"><span class="nav-symbol">↗</span>Leave requests</a>
+        <a th:href="@{/admin/mess}" th:classappend="${activePage == 'mess'} ? ' is-active' : ''"><span class="nav-symbol">✦</span>Mess</a>
+        <a th:href="@{/admin/fees}" th:classappend="${activePage == 'fees'} ? ' is-active' : ''"><span class="nav-symbol">₹</span>Fees</a>
+        <a th:href="@{/admin/profile}" th:classappend="${activePage == 'profile'} ? ' is-active' : ''"><span class="nav-symbol">◉</span>Profile</a>
+    </nav>
+    <div class="sidebar-bottom">
+        <div class="sidebar-help">
+            <span class="help-icon">i</span>
+            <div><strong>Administration</strong><small>Hostel operations console</small></div>
+        </div>
+        <form th:action="@{/logout}" method="post" class="logout-form"><button type="submit" class="sidebar-logout"><span class="nav-symbol">↪</span>Sign out</button></form>
+        <div class="sidebar-footnote">HOSTEL MANAGEMENT · 2026</div>
+    </div>
+</aside>
+
+<header th:fragment="topbar(name, subtitle)" class="portal-topbar" th:with="displayUser=${student != null ? student.name : (adminName != null ? adminName : 'Administrator')}">
+    <div class="topbar-title">
+        <button class="sidebar-toggle" type="button" aria-label="Open navigation" aria-controls="portalSidebar" aria-expanded="false">☰</button>
+        <div><span class="eyebrow" th:text="${subtitle}">STUDENT PORTAL</span><strong th:text="${name}">Dashboard</strong></div>
+    </div>
+    <div class="topbar-user">
+        <span class="status-dot"></span>
+        <span th:text="${displayUser}">Student</span>
+        <span class="topbar-avatar" th:text="${#strings.substring(displayUser, 0, 1)}">S</span>
+    </div>
+</header>
+</body>
+</html>

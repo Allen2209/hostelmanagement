@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('My profile')}"></head>
+<body class="portal-body"><div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: studentSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('My profile', 'STUDENT PORTAL')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">ACCOUNT</div><h1>My profile</h1><p>Keep your student and emergency contact details up to date.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div><div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="portal-card">
+                <div class="profile-summary"><div class="profile-large-avatar" th:text="${#strings.substring(student.name, 0, 1)}">S</div><div><h2 th:text="${student.name}">Student</h2><p>Student ID: <strong th:text="${student.studentId}">STU001</strong></p></div></div>
+                <form th:action="@{/student/profile}" th:object="${profileForm}" method="post">
+                    <div class="info-grid">
+                        <div class="form-group"><label class="form-label" for="studentId">Student ID</label><input id="studentId" class="form-control no-icon" th:value="${student.studentId}" readonly></div>
+                        <div class="form-group"><label class="form-label" for="name">Full name</label><input id="name" th:field="*{name}" class="form-control no-icon" required></div>
+                        <div class="form-group"><label class="form-label" for="email">Email</label><input id="email" type="email" th:field="*{email}" class="form-control no-icon" required></div>
+                        <div class="form-group"><label class="form-label" for="phone">Phone</label><input id="phone" th:field="*{phone}" class="form-control no-icon" required></div>
+                        <div class="form-group"><label class="form-label" for="departmentName">Department</label><input id="departmentName" th:field="*{departmentName}" class="form-control no-icon" required></div>
+                        <div class="form-group"><label class="form-label" for="academicYear">Year</label><select id="academicYear" th:field="*{academicYear}" class="form-control no-icon" required><option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4">Year 4</option><option value="5">Year 5</option></select></div>
+                        <div class="form-group"><label class="form-label" for="gender">Gender</label><select id="gender" th:field="*{gender}" class="form-control no-icon" required><option value="FEMALE">FEMALE</option><option value="MALE">MALE</option><option value="OTHER">OTHER</option></select></div>
+                        <div class="form-group"><label class="form-label" for="parentName">Parent / guardian</label><input id="parentName" th:field="*{parentName}" class="form-control no-icon" required></div>
+                        <div class="form-group"><label class="form-label" for="parentPhone">Parent phone</label><input id="parentPhone" th:field="*{parentPhone}" class="form-control no-icon" required></div>
+                        <div class="form-group full-width"><label class="form-label" for="homeAddress">Address</label><textarea id="homeAddress" th:field="*{homeAddress}" class="form-control no-icon" rows="3" required></textarea></div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Save profile</button>
+                </form>
+            </section>
+        </div>
+    </main>
+</div></body></html>

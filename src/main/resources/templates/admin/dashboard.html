@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Admin dashboard')}"></head>
+<body class="portal-body">
+<div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: adminSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Admin dashboard', 'ADMINISTRATION')}"></header>
+        <div class="portal-content">
+            <section class="dashboard-hero admin-hero">
+                <div class="admin-hero-copy">
+                    <span class="eyebrow">HOSTEL OPERATIONS</span>
+                    <h1>Good day, <span th:text="${adminName}">Administrator</span></h1>
+                    <p>Your operations overview is ready. Review what needs attention and keep campus life running smoothly.</p>
+                </div>
+                <div class="hero-actions">
+                    <a th:href="@{/admin/room-requests}" class="hero-action">Review requests <span aria-hidden="true">→</span></a>
+                    <a th:href="@{/admin/students}" class="hero-secondary-action">Student directory</a>
+                </div>
+                <span class="admin-hero-orbit" aria-hidden="true"></span>
+            </section>
+            <section class="metric-grid">
+                <article class="metric-card"><span class="metric-icon">♧</span><div><span>Total students</span><strong th:text="${totalStudents}">0</strong></div></article>
+                <article class="metric-card"><span class="metric-icon green">▤</span><div><span>Total hostels</span><strong th:text="${totalHostels}">0</strong></div></article>
+                <article class="metric-card"><span class="metric-icon">▦</span><div><span>Total rooms</span><strong th:text="${totalRooms}">0</strong></div></article>
+                <article class="metric-card"><span class="metric-icon green">⌂</span><div><span>Available rooms</span><strong th:text="${availableRooms}">0</strong></div></article>
+                <article class="metric-card"><span class="metric-icon amber">◩</span><div><span>Full rooms</span><strong th:text="${fullRooms}">0</strong></div></article>
+                <article class="metric-card"><span class="metric-icon violet">◷</span><div><span>Pending room requests</span><strong th:text="${pendingRequests}">0</strong></div></article>
+                <article class="metric-card"><span class="metric-icon amber">◇</span><div><span>Open complaints</span><strong th:text="${pendingComplaints}">0</strong></div></article>
+                <article class="metric-card"><span class="metric-icon violet">↗</span><div><span>Pending leave requests</span><strong th:text="${pendingLeaves}">0</strong></div></article>
+                <article class="metric-card"><span class="metric-icon">₹</span><div><span>Pending fees</span><strong th:text="${pendingFees}">0</strong></div></article>
+            </section>
+            <section class="content-grid">
+                <article class="portal-card">
+                    <div class="portal-card-heading"><div><h2>Recent room requests</h2><p>Latest student room applications</p></div><a th:href="@{/admin/room-requests}" class="text-link">Review all</a></div>
+                    <div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Student</th><th>Room</th><th>Date</th><th>Status</th></tr></thead><tbody>
+                        <tr th:each="request : ${recentRequests}"><td th:text="${request.student.name}">Student</td><td th:text="${request.room.roomNumber}">101</td><td th:text="${#temporals.format(request.requestDate, 'dd MMM yyyy')}">Date</td><td><span class="status-badge" th:text="${request.status}">PENDING</span></td></tr>
+                        <tr th:if="${#lists.isEmpty(recentRequests)}"><td colspan="4" class="table-empty">No room requests.</td></tr>
+                    </tbody></table></div>
+                </article>
+                <article class="portal-card">
+                    <div class="portal-card-heading"><div><h2>Mess preferences</h2><p>Student meal choices</p></div><a th:href="@{/admin/mess}" class="text-link">Manage mess</a></div>
+                    <div class="preference-count"><span>Vegetarian</span><strong th:text="${vegetarianCount}">0</strong></div>
+                    <div class="preference-count"><span>Non-vegetarian</span><strong th:text="${nonVegetarianCount}">0</strong></div>
+                    <div class="preference-count"><span>Vegan</span><strong th:text="${veganCount}">0</strong></div>
+                </article>
+            </section>
+            <section class="content-grid dashboard-secondary-grid">
+                <article class="portal-card">
+                    <div class="portal-card-heading"><div><h2>Recent complaints</h2><p>Latest resident support cases</p></div><a th:href="@{/admin/complaints}" class="text-link">View all</a></div>
+                    <div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Student</th><th>Subject</th><th>Status</th></tr></thead><tbody>
+                        <tr th:each="complaint : ${recentComplaints}"><td th:text="${complaint.student.name}">Student</td><td th:text="${complaint.subject}">Subject</td><td><span class="status-badge" th:text="${complaint.status}">PENDING</span></td></tr>
+                        <tr th:if="${#lists.isEmpty(recentComplaints)}"><td colspan="3" class="table-empty">No complaints.</td></tr>
+                    </tbody></table></div>
+                </article>
+                <article class="portal-card">
+                    <div class="portal-card-heading"><div><h2>Recent leave requests</h2><p>Student leave applications</p></div><a th:href="@{/admin/leave}" class="text-link">Review all</a></div>
+                    <div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Student</th><th>Dates</th><th>Status</th></tr></thead><tbody>
+                        <tr th:each="leave : ${recentLeaves}"><td th:text="${leave.student.name}">Student</td><td th:text="|${leave.fromDate} – ${leave.toDate}|">Dates</td><td><span class="status-badge" th:text="${leave.status}">PENDING</span></td></tr>
+                        <tr th:if="${#lists.isEmpty(recentLeaves)}"><td colspan="3" class="table-empty">No leave requests.</td></tr>
+                    </tbody></table></div>
+                </article>
+            </section>
+            <section class="portal-card dashboard-announcement">
+                <div class="portal-card-heading"><div><h2>Send an announcement</h2><p>Notify all registered students</p></div></div>
+                <form th:action="@{/admin/notifications/broadcast}" method="post" class="inline-form">
+                    <input name="title" class="form-control no-icon" placeholder="Announcement title" maxlength="150" required>
+                    <input name="message" class="form-control no-icon" placeholder="Message" maxlength="1000" required>
+                    <button class="btn btn-primary" type="submit">Send notification</button>
+                </form>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>

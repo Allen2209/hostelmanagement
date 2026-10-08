@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('My room')}"></head>
+<body class="portal-body">
+<div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: studentSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('My room', 'STUDENT PORTAL')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">ACCOMMODATION</div><h1>My room</h1><p>Your current room and allocation details.</p></div></div>
+            <section class="portal-card">
+                <div class="empty-state" th:if="${student.room == null}">
+                    <div class="empty-state-icon">⌂</div>
+                    <h2>No room allocation found</h2>
+                    <p>Browse available rooms and submit a request. Your allocation will appear here after administrator approval.</p>
+                    <a th:href="@{/student/rooms}" class="btn btn-primary" style="margin-top:1rem">Browse rooms</a>
+                </div>
+                <div th:if="${student.room != null}">
+                    <div class="profile-summary">
+                        <div class="profile-large-avatar">⌂</div>
+                        <div><h2 th:text="|Room ${student.room.roomNumber}|">Room 101</h2><p th:text="${student.room.hostel.name}">Hostel</p></div>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item"><div class="info-label">Hostel</div><div class="info-value" th:text="${student.room.hostel.name}">A Block</div></div>
+                        <div class="info-item"><div class="info-label">Room type</div><div class="info-value" th:text="${student.room.roomType}">4 Sharing</div></div>
+                        <div class="info-item"><div class="info-label">Capacity</div><div class="info-value" th:text="${student.room.capacity}">4</div></div>
+                        <div class="info-item"><div class="info-label">Room status</div><div class="info-value" th:text="${student.room.status}">AVAILABLE</div></div>
+                    </div>
+                    <div class="portal-card-heading" style="margin-top:1.5rem"><div><h2>Roommates</h2><p>Students assigned to this room</p></div></div>
+                    <ul class="roommate-list"><li th:each="mate : ${roommates}" th:text="${mate.name}">Roommate name</li><li th:if="${#lists.isEmpty(roommates)}">No other roommates assigned.</li></ul>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>

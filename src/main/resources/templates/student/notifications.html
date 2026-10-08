@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Notifications')}"></head>
+<body class="portal-body"><div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: studentSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Notifications', 'STUDENT PORTAL')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">UPDATES</div><h1>Notifications</h1><p>Room, support, leave, and fee updates from your hostel.</p></div></div>
+            <section class="portal-card">
+                <div class="notification-list">
+                    <article class="notification-row" th:each="notice : ${notifications}" th:classappend="${notice.isRead} ? '' : ' unread'">
+                        <span class="notification-mark">♢</span>
+                        <div class="notification-content"><strong th:text="${notice.title}">Update</strong><p th:text="${notice.message}">Message</p><small th:text="${#temporals.format(notice.createdAt, 'dd MMM yyyy, HH:mm')}">Date</small></div>
+                        <form th:if="${!notice.isRead}" th:action="@{/student/notifications/{id}/read(id=${notice.id})}" method="post"><button class="btn btn-outline btn-small" type="submit">Mark read</button></form>
+                        <span th:if="${notice.isRead}" class="read-label">Read</span>
+                    </article>
+                    <div class="empty-state compact-empty" th:if="${#lists.isEmpty(notifications)}"><div class="empty-state-icon">♢</div><h2>You're all caught up</h2><p>Notifications will appear here when the hostel team shares an update.</p></div>
+                </div>
+            </section>
+        </div>
+    </main>
+</div></body></html>

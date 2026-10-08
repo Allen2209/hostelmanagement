@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Mess management')}"></head>
+<body class="portal-body"><div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: adminSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Mess management', 'ADMINISTRATION')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">DINING SERVICES</div><h1>Mess</h1><p>Publish daily menus and view student meal choices.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div><div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="portal-card" style="margin-bottom:1rem">
+                <div class="portal-card-heading"><div><h2>Publish a menu</h2><p>Set the meal plan for a calendar date.</p></div></div>
+                <form th:action="@{/admin/mess/save}" th:object="${menuForm}" method="post" class="inline-form">
+                    <input type="date" th:field="*{menuDate}" class="form-control no-icon" required>
+                    <input th:field="*{breakfast}" class="form-control no-icon" placeholder="Breakfast" required>
+                    <input th:field="*{lunch}" class="form-control no-icon" placeholder="Lunch" required>
+                    <input th:field="*{snacks}" class="form-control no-icon" placeholder="Snacks" required>
+                    <input th:field="*{dinner}" class="form-control no-icon" placeholder="Dinner" required>
+                    <button class="btn btn-primary" type="submit">Publish menu</button>
+                </form>
+            </section>
+            <section class="content-grid">
+                <article class="portal-card"><div class="portal-card-heading"><div><h2>Published menus</h2><p>Menus visible to students.</p></div></div>
+                    <div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Date</th><th>Breakfast</th><th>Lunch</th><th>Snacks</th><th>Dinner</th><th></th></tr></thead><tbody>
+                        <tr th:each="menu : ${menus}"><td th:text="${menu.menuDate}">Date</td><td th:text="${menu.breakfast}">Breakfast</td><td th:text="${menu.lunch}">Lunch</td><td th:text="${menu.snacks}">Snacks</td><td th:text="${menu.dinner}">Dinner</td><td><form th:action="@{/admin/mess/{id}/delete(id=${menu.id})}" method="post"><button class="btn btn-outline btn-small" type="submit">Delete</button></form></td></tr>
+                        <tr th:if="${#lists.isEmpty(menus)}"><td colspan="6" class="table-empty">No menus published.</td></tr>
+                    </tbody></table></div>
+                </article>
+                <article class="portal-card"><div class="portal-card-heading"><div><h2>Food preference totals</h2><p>Current resident choices</p></div></div>
+                    <div class="preference-count"><span>Vegetarian</span><strong th:text="${vegetarianCount}">0</strong></div>
+                    <div class="preference-count"><span>Non-vegetarian</span><strong th:text="${nonVegetarianCount}">0</strong></div>
+                    <div class="preference-count"><span>Vegan</span><strong th:text="${veganCount}">0</strong></div>
+                </article>
+            </section>
+            <section class="portal-card" style="margin-top:1rem"><div class="portal-card-heading"><div><h2>Student mess preferences</h2><p>Meal attendance selections.</p></div></div>
+                <div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Student</th><th>Student ID</th><th>Food preference</th><th>Breakfast</th><th>Lunch</th><th>Snacks</th><th>Dinner</th></tr></thead><tbody>
+                    <tr th:each="preference : ${preferences}"><td th:text="${preference.student.name}">Student</td><td th:text="${preference.student.studentId}">ID</td><td th:text="${preference.foodPreference}">VEGAN</td><td th:text="${preference.breakfast ? 'Yes' : 'No'}">Yes</td><td th:text="${preference.lunch ? 'Yes' : 'No'}">Yes</td><td th:text="${preference.snacks ? 'Yes' : 'No'}">No</td><td th:text="${preference.dinner ? 'Yes' : 'No'}">Yes</td></tr>
+                    <tr th:if="${#lists.isEmpty(preferences)}"><td colspan="7" class="table-empty">No preferences submitted.</td></tr>
+                </tbody></table></div>
+            </section>
+        </div>
+    </main>
+</div></body></html>

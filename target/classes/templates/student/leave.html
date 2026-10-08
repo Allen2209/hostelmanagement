@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Leave requests')}"></head>
+<body class="portal-body"><div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: studentSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Leave requests', 'STUDENT PORTAL')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">LEAVE APPLICATION</div><h1>Leave requests</h1><p>Apply for leave and track approval status.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div><div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="content-grid">
+                <article class="portal-card">
+                    <div class="portal-card-heading"><div><h2>Apply for leave</h2><p>Provide dates and parent/guardian contact details.</p></div></div>
+                    <form th:action="@{/student/leave}" th:object="${leaveForm}" method="post">
+                        <div class="info-grid">
+                            <div class="form-group"><label class="form-label" for="fromDate">From</label><input id="fromDate" type="date" th:field="*{fromDate}" class="form-control no-icon" required></div>
+                            <div class="form-group"><label class="form-label" for="toDate">To</label><input id="toDate" type="date" th:field="*{toDate}" class="form-control no-icon" required></div>
+                            <div class="form-group full-width"><label class="form-label" for="reason">Reason</label><textarea id="reason" th:field="*{reason}" class="form-control no-icon" rows="3" required></textarea></div>
+                            <div class="form-group"><label class="form-label" for="parentName">Parent / guardian</label><input id="parentName" th:field="*{parentName}" class="form-control no-icon" required></div>
+                            <div class="form-group"><label class="form-label" for="parentPhone">Parent phone</label><input id="parentPhone" th:field="*{parentPhone}" class="form-control no-icon" required></div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Submit leave request</button>
+                    </form>
+                </article>
+                <article class="portal-card">
+                    <div class="portal-card-heading"><div><h2>Your applications</h2><p>Previously submitted leave requests.</p></div></div>
+                    <div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Dates</th><th>Reason</th><th>Status</th><th>Remarks</th></tr></thead><tbody>
+                        <tr th:each="leave : ${leaves}"><td th:text="|${leave.fromDate} – ${leave.toDate}|">Dates</td><td th:text="${leave.reason}">Reason</td><td><span class="status-badge" th:text="${leave.status}">PENDING</span></td><td th:text="${leave.adminRemarks != null ? leave.adminRemarks : '—'}">Remarks</td></tr>
+                        <tr th:if="${#lists.isEmpty(leaves)}"><td colspan="4" class="table-empty">No leave requests submitted.</td></tr>
+                    </tbody></table></div>
+                </article>
+            </section>
+        </div>
+    </main>
+</div></body></html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Room requests')}"></head>
+<body class="portal-body">
+<div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: adminSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Room requests', 'ADMINISTRATION')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">APPLICATION REVIEW</div><h1>Room requests</h1><p>Review and process incoming accommodation requests.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div><div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="portal-card">
+                <div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Request</th><th>Student</th><th>Student ID</th><th>Room</th><th>Submitted</th><th>Status / review</th></tr></thead><tbody>
+                    <tr th:each="request : ${requests}">
+                        <td th:text="${request.id}">1</td><td th:text="${request.student.name}">Student</td><td th:text="${request.student.studentId}">STU001</td>
+                        <td th:text="|${request.room.hostel.name} · ${request.room.roomNumber}|">A Block · 101</td><td th:text="${#temporals.format(request.requestDate, 'dd MMM yyyy')}">Date</td>
+                        <td>
+                            <span class="status-badge" th:text="${request.status}">PENDING</span>
+                            <form th:if="${request.status == 'PENDING'}" th:action="@{/admin/room-requests/{id}/review(id=${request.id})}" method="post" class="review-form">
+                                <input name="remarks" class="form-control no-icon compact-input" placeholder="Admin remarks" maxlength="500">
+                                <button name="status" value="APPROVED" class="btn btn-primary btn-small" type="submit">Approve</button>
+                                <button name="status" value="REJECTED" class="btn btn-outline btn-small" type="submit">Reject</button>
+                            </form>
+                            <small class="remarks-text" th:if="${request.adminRemarks}" th:text="${request.adminRemarks}"></small>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(requests)}"><td colspan="6" class="table-empty">No room requests to review.</td></tr>
+                </tbody></table></div>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>

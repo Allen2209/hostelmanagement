@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Complaints')}"></head>
+<body class="portal-body">
+<div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: adminSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Complaints', 'ADMINISTRATION')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">RESIDENT SUPPORT</div><h1>Complaints</h1><p>Track reported issues and resolution progress.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div><div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="portal-card">
+                <div class="data-table-wrap"><table class="portal-table"><thead><tr><th>ID</th><th>Student</th><th>Category / subject</th><th>Description</th><th>Date</th><th>Review</th></tr></thead><tbody>
+                    <tr th:each="complaint : ${complaints}">
+                        <td th:text="${complaint.id}">1</td><td th:text="|${complaint.student.name} (${complaint.student.studentId})|">Student</td>
+                        <td th:text="|${complaint.category} · ${complaint.subject}|">Issue</td><td class="wrap-cell" th:text="${complaint.description}">Description</td>
+                        <td th:text="${#temporals.format(complaint.createdAt, 'dd MMM yyyy')}">Date</td>
+                        <td><form th:action="@{/admin/complaints/{id}/review(id=${complaint.id})}" method="post" class="review-form">
+                            <select name="status" class="form-control no-icon compact-input"><option value="PENDING" th:selected="${complaint.status == 'PENDING'}">Pending</option><option value="IN_PROGRESS" th:selected="${complaint.status == 'IN_PROGRESS'}">In progress</option><option value="RESOLVED" th:selected="${complaint.status == 'RESOLVED'}">Resolved</option><option value="REJECTED" th:selected="${complaint.status == 'REJECTED'}">Rejected</option></select>
+                            <input name="remarks" class="form-control no-icon compact-input" th:value="${complaint.adminRemarks}" placeholder="Resolution remarks">
+                            <button class="btn btn-primary btn-small" type="submit">Update</button></form></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(complaints)}"><td colspan="6" class="table-empty">No complaints to review.</td></tr>
+                </tbody></table></div>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Mess')}"></head>
+<body class="portal-body"><div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: studentSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Mess', 'STUDENT PORTAL')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">DINING SERVICES</div><h1>Mess</h1><p>Set your food preference and review the upcoming menu.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div><div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="content-grid">
+                <article class="portal-card">
+                    <div class="portal-card-heading"><div><h2>Your food preference</h2><p>You can update these choices any time.</p></div></div>
+                    <div th:if="${preference != null}" class="notice-card" style="margin-bottom:1rem"><span>✓</span><div><strong>Current choice</strong><span th:text="|${preference.foodPreference} · ${preference.breakfast ? 'Breakfast ' : ''}${preference.lunch ? 'Lunch ' : ''}${preference.snacks ? 'Snacks ' : ''}${preference.dinner ? 'Dinner' : ''}|">Preference details</span></div></div>
+                    <form th:action="@{/student/mess}" th:object="${messForm}" method="post">
+                        <div class="form-group"><label for="foodPreference" class="form-label">Food preference</label><select id="foodPreference" th:field="*{foodPreference}" class="form-control no-icon" required><option value="">Select preference</option><option value="VEGETARIAN">Vegetarian</option><option value="NON-VEGETARIAN">Non-vegetarian</option><option value="VEGAN">Vegan</option></select></div>
+                        <div class="meal-options">
+                            <label><input type="checkbox" th:field="*{breakfast}"> Breakfast</label>
+                            <label><input type="checkbox" th:field="*{lunch}"> Lunch</label>
+                            <label><input type="checkbox" th:field="*{snacks}"> Snacks</label>
+                            <label><input type="checkbox" th:field="*{dinner}"> Dinner</label>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Save preference</button>
+                    </form>
+                </article>
+                <article class="portal-card">
+                    <div class="portal-card-heading"><div><h2>Mess menu</h2><p>Menu set by your hostel admin.</p></div></div>
+                    <div th:each="menu : ${menus}" class="menu-day">
+                        <div class="menu-date" th:text="${#temporals.format(menu.menuDate, 'EEEE, dd MMM')}">Monday, 12 May</div>
+                        <div class="menu-meal"><span>Breakfast</span><strong th:text="${menu.breakfast}">Idli + Sambar</strong></div>
+                        <div class="menu-meal"><span>Lunch</span><strong th:text="${menu.lunch}">Rice + vegetable</strong></div>
+                        <div class="menu-meal"><span>Snacks</span><strong th:text="${menu.snacks}">Tea + biscuits</strong></div>
+                        <div class="menu-meal"><span>Dinner</span><strong th:text="${menu.dinner}">Chapati + dal</strong></div>
+                    </div>
+                    <div class="empty-state compact-empty" th:if="${#lists.isEmpty(menus)}"><div class="empty-state-icon">✦</div><h2>No menu published</h2><p>Your hostel menu will be shown here when available.</p></div>
+                </article>
+            </section>
+        </div>
+    </main>
+</div></body></html>

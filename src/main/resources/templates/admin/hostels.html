@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Hostels')}"></head>
+<body class="portal-body">
+<div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: adminSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Hostels', 'ADMINISTRATION')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">PROPERTY DIRECTORY</div><h1>Hostels</h1><p>Manage hostel buildings and their details.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div><div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="portal-card" style="margin-bottom:1rem">
+                <div class="portal-card-heading"><div><h2>Add hostel</h2><p>Create a residence building.</p></div></div>
+                <form th:action="@{/admin/hostels/save}" th:object="${hostelForm}" method="post" class="inline-form">
+                    <input th:field="*{name}" class="form-control no-icon" placeholder="Hostel name" required>
+                    <input th:field="*{location}" class="form-control no-icon" placeholder="Location">
+                    <input th:field="*{description}" class="form-control no-icon" placeholder="Description">
+                    <button class="btn btn-primary" type="submit">Add hostel</button>
+                </form>
+            </section>
+            <section class="portal-card">
+                <div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Hostel</th><th>Location</th><th>Description</th><th>Status</th><th>Update</th></tr></thead><tbody>
+                    <tr th:each="hostel : ${hostels}"><td colspan="4">
+                        <form th:action="@{/admin/hostels/save(id=${hostel.id})}" method="post" class="inline-form">
+                            <input name="name" class="form-control no-icon" th:value="${hostel.name}" required>
+                            <input name="location" class="form-control no-icon" th:value="${hostel.location}">
+                            <input name="description" class="form-control no-icon" th:value="${hostel.description}">
+                            <input name="status" class="form-control no-icon" th:value="${hostel.status}" required>
+                            <button class="btn btn-outline btn-small" type="submit">Save</button>
+                        </form>
+                    </td><td><form th:action="@{/admin/hostels/{id}/deactivate(id=${hostel.id})}" method="post"><button class="btn btn-outline btn-small" type="submit" th:disabled="${hostel.status == 'INACTIVE'}">Deactivate</button></form></td></tr>
+                    <tr th:if="${#lists.isEmpty(hostels)}"><td colspan="5" class="table-empty">No hostels added yet.</td></tr>
+                </tbody></table></div>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>

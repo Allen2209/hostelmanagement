@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/portal :: head('Students')}"></head>
+<body class="portal-body">
+<div class="portal-layout">
+    <aside th:replace="~{fragments/portal :: adminSidebar(${activePage})}"></aside>
+    <main class="portal-main">
+        <header th:replace="~{fragments/portal :: topbar('Students', 'ADMINISTRATION')}"></header>
+        <div class="portal-content">
+            <div class="page-heading"><div><div class="section-label">RESIDENT DIRECTORY</div><h1>Students</h1><p>Review student accounts registered with the hostel.</p></div></div>
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div><div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+            <section class="portal-card" style="margin-bottom:1rem">
+                <div class="portal-card-heading"><div><h2>Add a student</h2><p>New accounts can sign in with their student ID and chosen password.</p></div></div>
+                <form th:action="@{/admin/students/save}" th:object="${studentForm}" method="post">
+                    <div class="inline-form student-create-form">
+                        <input th:field="*{studentId}" class="form-control no-icon" placeholder="Student ID" required>
+                        <input th:field="*{name}" class="form-control no-icon" placeholder="Full name" required>
+                        <input th:field="*{dateOfBirth}" type="date" class="form-control no-icon" aria-label="Date of birth" required>
+                        <input th:field="*{email}" type="email" class="form-control no-icon" placeholder="Email" required>
+                        <input th:field="*{phone}" class="form-control no-icon" placeholder="Phone" required>
+                        <input th:field="*{password}" type="password" class="form-control no-icon" placeholder="Password (8+ chars)" minlength="8" required>
+                        <input th:field="*{departmentName}" class="form-control no-icon" placeholder="Department" required>
+                        <select th:field="*{academicYear}" class="form-control no-icon" required><option value="">Year</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>
+                        <select th:field="*{gender}" class="form-control no-icon" required><option value="">Gender</option><option value="FEMALE">FEMALE</option><option value="MALE">MALE</option><option value="OTHER">OTHER</option></select>
+                        <input th:field="*{parentName}" class="form-control no-icon" placeholder="Parent / guardian" required>
+                        <input th:field="*{parentPhone}" class="form-control no-icon" placeholder="Parent phone" required>
+                        <input th:field="*{homeAddress}" class="form-control no-icon" placeholder="Address" required>
+                        <button class="btn btn-primary" type="submit">Create account</button>
+                    </div>
+                </form>
+            </section>
+            <section class="portal-card">
+                <form th:action="@{/admin/students}" method="get" class="search-form"><input name="q" th:value="${q}" class="form-control no-icon" placeholder="Search by ID, name, email, or department"><button class="btn btn-outline" type="submit">Search</button></form>
+                <div class="data-table-wrap"><table class="portal-table"><thead><tr><th>Student ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Department</th><th>Year</th><th>Room</th><th>Account</th><th>Action</th></tr></thead><tbody>
+                    <tr th:each="student : ${students}">
+                        <td th:text="${student.studentId}">STU001</td><td th:text="${student.name}">Name</td><td th:text="${student.email}">Email</td><td th:text="${student.phone}">Phone</td><td th:text="${student.departmentName}">Department</td><td th:text="${student.academicYear}">1</td><td th:text="${student.room != null ? student.room.roomNumber : '—'}">—</td><td><span class="status-badge" th:text="${student.userAccount != null and student.userAccount.enabled ? 'ACTIVE' : 'INACTIVE'}">ACTIVE</span></td>
+                        <td>
+                            <details><summary class="text-link">Edit</summary>
+                                <form th:action="@{/admin/students/{id}/edit(id=${student.id})}" method="post" class="student-edit-form">
+                                    <input name="name" class="form-control no-icon" th:value="${student.name}" required>
+                                    <input name="email" type="email" class="form-control no-icon" th:value="${student.email}" required>
+                                    <input name="phone" class="form-control no-icon" th:value="${student.phone}" required>
+                                    <input name="departmentName" class="form-control no-icon" th:value="${student.departmentName}" required>
+                                    <input name="academicYear" class="form-control no-icon" th:value="${student.academicYear}" required>
+                                    <input name="gender" class="form-control no-icon" th:value="${student.gender}" required>
+                                    <input name="homeAddress" class="form-control no-icon" th:value="${student.homeAddress}" required>
+                                    <input name="parentName" class="form-control no-icon" th:value="${student.parentName}" required>
+                                    <input name="parentPhone" class="form-control no-icon" th:value="${student.parentPhone}" required>
+                                    <button class="btn btn-primary btn-small" type="submit">Save changes</button>
+                                </form>
+                            </details>
+                            <form th:action="@{/admin/students/{id}/deactivate(id=${student.id})}" method="post"><button class="btn btn-outline btn-small" type="submit" th:disabled="${student.userAccount == null or !student.userAccount.enabled}">Deactivate</button></form>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(students)}"><td colspan="9" class="table-empty">No matching students.</td></tr>
+                </tbody></table></div>
+            </section>
+        </div>
+    </main>
+</div>
+</body>
+</html>
